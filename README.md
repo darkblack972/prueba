@@ -1,1 +1,136 @@
-# prueba
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Detección de Daños con YOLO</title>
+  <style>
+    body {
+      background-color: #0e1117;
+      color: #ffffff;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      text-align: center;
+      padding: 50px;
+    }
+
+    h1 {
+      font-size: 36px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    p {
+      font-size: 16px;
+      color: #aaaaaa;
+      margin-bottom: 30px;
+    }
+
+    .upload-container {
+      background-color: #262730;
+      border-radius: 10px;
+      border: 1px solid #444;
+      padding: 20px;
+      width: 500px;
+      margin: 0 auto;
+      text-align: left;
+    }
+
+    .upload-box {
+      border: 2px dashed #555;
+      background-color: #20232a;
+      padding: 25px;
+      border-radius: 10px;
+      text-align: center;
+      cursor: pointer;
+      color: #ccc;
+      margin-bottom: 10px;
+    }
+
+    .upload-box:hover {
+      background-color: #2c2f36;
+    }
+
+    .browse-button {
+      background-color: #1f2023;
+      color: white;
+      border: 1px solid #555;
+      padding: 10px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      float: right;
+    }
+
+    .browse-button:hover {
+      background-color: #333;
+    }
+
+    .hidden-input {
+      display: none;
+    }
+
+    .warning {
+      background-color: #736c00;
+      color: #fff;
+      padding: 15px;
+      margin: 30px auto;
+      border-radius: 5px;
+      width: 80%;
+      font-size: 15px;
+      text-align: left;
+    }
+
+    .image-container img {
+      max-width: 80%;
+      margin-top: 20px;
+      border-radius: 10px;
+    }
+
+    .caption {
+      margin-top: 5px;
+      font-style: italic;
+      color: #ccc;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Detección de Daños en Carreteras con YOLO</h1>
+  <p>Sube una imagen</p>
+
+  <div class="upload-container">
+    <div class="upload-box" onclick="document.getElementById('fileInput').click();">
+      Drag and drop file here<br>
+      <small>Limit 200MB per file • JPG, JPEG, PNG</small>
+      <button class="browse-button">Browse files</button>
+    </div>
+    <input type="file" id="fileInput" accept="image/*" class="hidden-input" onchange="previewImage(event)">
+  </div>
+
+  <div id="preview-container" class="image-container"></div>
+
+  <script>
+    function previewImage(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const previewContainer = document.getElementById('preview-container');
+        previewContainer.innerHTML = `
+          <img src="${e.target.result}" alt="Imagen original">
+          <div class="caption">Imagen original</div>
+
+          <div class="warning">
+            The <code>use_column_width</code> parameter has been deprecated and will be removed in a future release. 
+            Please utilize the <code>use_container_width</code> parameter instead.
+          </div>
+
+          <img src="https://media.discordapp.net/attachments/1240821264197877812/1390557050781696000/image.webp?ex=6868b0ac&is=68675f2c&hm=ddac24fadbc49f2b97ed0bc06461aaa1ced4c83c61f9dbed98ae9ca180bd19bf&=&format=webp" alt="Resultado">
+          <div class="caption">Resultado</div>
+        `;
+      };
+      reader.readAsDataURL(file);
+    }
+  </script>
+
+</body>
+</html>
