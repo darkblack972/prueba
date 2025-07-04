@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dataset - Sistema de Reconocimiento</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+    body {
+      background-color: #f5f6fa;
+      display: flex;
+      flex-direction: column;
+    }
+    .topbar {
+      background: #fff;
+      padding: 10px 20px;
+      display: flex;
+      align-items: center;
+      border-bottom: 1px solid #ddd;
+    }
+    .topbar img {
+      width: 40px;
+      height: 40px;
+      border-radius: 6px;
+      margin-right: 10px;
+    }
+    .topbar-text {
+      line-height: 1.2;
+    }
+    .topbar-text h2 {
+      font-size: 14px;
+      color: #555;
+    }
+    .topbar-text p {
+      font-size: 12px;
+      color: #888;
+    }
+    .header-wrapper {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #fff;
+      padding: 10px 20px;
+      border-bottom: 1px solid #ddd;
+    }
+    .header-wrapper h1 {
+      font-size: 18px;
+      color: #333;
+    }
+    .header-buttons {
+      display: flex;
+      gap: 10px;
+    }
+    .btn-purple {
+      background-color: #7c3aed;
+      color: white;
+      padding: 8px 16px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .btn-white {
+      background-color: #fff;
+      color: #333;
+      border: 1px solid #ccc;
+      padding: 8px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .container {
+      display: flex;
+      flex: 1;
+    }
+    .sidebar {
+      width: 250px;
+      background-color: #fff;
+      padding: 20px;
+      border-right: 1px solid #ddd;
+      height: calc(100vh - 102px);
+      overflow-y: auto;
+    }
+    .sidebar h3 {
+      margin: 20px 0 10px;
+      font-size: 14px;
+      color: #888;
+      border-top: 1px solid #eee;
+      padding-top: 10px;
+    }
+    .sidebar ul {
+      list-style: none;
+    }
+    .sidebar ul li {
+      margin: 12px 0;
+      font-size: 15px;
+      color: #444;
+      cursor: pointer;
+      position: relative;
+    }
+    .sidebar ul li::before {
+      content: '\25A1';
+      color: #999;
+      margin-right: 8px;
+      display: inline-block;
+    }
+    .sidebar ul li:nth-child(1)::before { content: '\1F4E4'; color: #aaa; }
+    .sidebar ul li:nth-child(2)::before { content: '\270F';  color: #aaa; }
+    .sidebar ul li:nth-child(3)::before { content: '\1F4C2'; color: #aaa; }
+    .sidebar ul li:nth-child(4)::before { content: '\23F0';  color: #aaa; }
+    .sidebar ul li:nth-child(5)::before { content: '\1F4CA'; color: #aaa; }
+    .sidebar ul li:nth-child(6)::before { content: '\1F3F7'; color: #aaa; }
+    .sidebar ul:nth-of-type(2) li:nth-child(1)::before { content: '\1F916'; color: #aaa; }
+    .sidebar ul:nth-of-type(2) li:nth-child(2)::before { content: '\1F441'; color: #aaa; }
+    .sidebar ul:nth-of-type(3) li:nth-child(1)::before { content: '\1F680'; color: #aaa; }
+
+    .sidebar ul li.active {
+      font-weight: bold;
+      color: #7c3aed;
+    }
+    .sidebar ul li.active::before {
+      color: #7c3aed;
+    }
+    .sidebar ul li.active::after {
+      content: "";
+      position: absolute;
+      left: -20px;
+      top: 0;
+      height: 100%;
+      width: 4px;
+      background-color: #7c3aed;
+      border-radius: 2px;
+    }
+
+    .main {
+      flex: 1;
+      padding: 20px;
+      background: #f5f6fa;
+    }
+    .toolbar-top,
+    .toolbar-bottom {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 10px;
+      align-items: center;
+    }
+    .toolbar-top input {
+      padding: 8px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      flex: 1;
+    }
+    .toolbar-top button {
+      background-color: #7c3aed;
+      color: white;
+      padding: 8px 16px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .toolbar-bottom select,
+    .toolbar-bottom button {
+      padding: 8px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+    .show-annotations-btn {
+      background-color: #fff;
+      font-weight: bold;
+      color: #333;
+    }
+    .image-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 16px;
+    }
+    .image-card {
+      position: relative;
+      background-color: #fff;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+      transition: 0.3s;
+    }
+    .image-card:hover {
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    }
+    .image-card img {
+      width: 100%;
+      height: 140px;
+      object-fit: cover;
+    }
+    .image-card .filename {
+      padding: 6px 10px;
+      font-size: 12px;
+      color: #666;
+    }
+    .image-card .tag {
+      position: absolute;
+      top: 8px;
+      left: 8px;
+      font-size: 20px;
+      color: white;
+      text-shadow: 0 0 2px black;
+    }
+    .image-card .selected {
+      border: 2px solid #7c3aed;
+    }
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <img src="https://media.discordapp.net/attachments/1240821264197877812/1390551283974537427/image.png?ex=6868ab4d&is=686759cd&hm=ec121f92b8d494fe9190b7d06398624582da87a3913a4632a1c2f91ef9b23f67&=&format=webp&quality=lossless" alt="Project Icon" />
+    <div class="topbar-text">
+      <h2>Mi Escritorio</h2>
+      <p>Sistema de R... – Instance Segmentation</p>
+    </div>
+  </div>
+
+  <div class="header-wrapper">
+    <h1>Dataset</h1>
+    <div class="header-buttons">
+      <button class="btn-white">+ New Dataset Version</button>
+      <button class="btn-purple">Train Model</button>
+    </div>
+  </div>
+
+  <div class="container">
+    <aside class="sidebar">
+      <h3>DATA</h3>
+      <ul>
+        <li>Upload Data</li>
+        <li>Annotate</li>
+        <li class="active">Dataset <span style="color: #7c3aed;">(10)</span></li>
+        <li>Versions</li>
+        <li>Analytics</li>
+        <li>Classes & Tags</li>
+      </ul>
+      <h3>MODELS</h3>
+      <ul>
+        <li>Models</li>
+        <li>Visualize</li>
+      </ul>
+      <h3>DEPLOY</h3>
+      <ul>
+        <li>Export / Deploy</li>
+      </ul>
+    </aside>
+
+    <main class="main">
+      <div class="toolbar-top">
+        <input type="text" placeholder="Search images" />
+        <button>Search by Image</button>
+      </div>
+      <div class="toolbar-bottom">
+        <select><option>Filter by filename</option></select>
+        <select><option>Split</option><option>Train</option><option>Test</option></select>
+        <select><option>Classes</option></select>
+        <select><option>Sort by</option><option>Newest</option><option>Oldest</option></select>
+        <button class="show-annotations-btn">Show annotations</button>
+      </div>
+
+      <div class="image-grid">
+        <div class="image-card">
+          <div class="tag">✔</div>
+          <img src="https://media.discordapp.net/attachments/1240821264197877812/1390551227896565800/image.png?ex=6868ab3f&is=686759bf&hm=6cda5fcb89890b51191f4ca2a3d4bc697d207e007870049b1acf6c7162e9b452&=&format=webp&quality=lossless" alt="img1">
+          <div class="filename">istockphoto-533964313-612x612.jpg</div>
+        </div>
+        <div class="image-card">
+          <div class="tag">✔</div>
+          <img src="https://media.discordapp.net/attachments/1240821264197877812/1390551283974537427/image.png?ex=6868ab4d&is=686759cd&hm=ec121f92b8d494fe9190b7d06398624582da87a3913a4632a1c2f91ef9b23f67&=&format=webp&quality=lossless" alt="img2">
+          <div class="filename">istockphoto-157743690.jpg</div>
+        </div>
+        <div class="image-card selected">
+          <div class="tag">✔</div>
+          <img src="https://media.discordapp.net/attachments/1240821264197877812/1390551344104083536/image.png?ex=6868ab5b&is=686759db&hm=1b4b0816a2a6d001b29931a559231f2408db19d5bd5f06fdba3bb2d99fdd1f93&=&format=webp&quality=lossless" alt="img3">
+          <div class="filename">istockphoto-601908512.jpg</div>
+        </div>
+        <div class="image-card">
+          <div class="tag">✔</div>
+          <img src="https://media.discordapp.net/attachments/1240821264197877812/1390551814503534632/image.png?ex=6868abcb&is=68675a4b&hm=c3938b3fce93f31e257cd1005165effe7ce37349ff1c4fae6ca255329ef735ca&=&format=webp&quality=lossless" alt="img4">
+          <div class="filename">istockphoto-928244014.jpg</div>
+        </div>
+      </div>
+    </main>
+  </div>
+</body>
+</html>
