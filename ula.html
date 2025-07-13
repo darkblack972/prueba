@@ -139,9 +139,9 @@
             {
                 text: "13. Respecto al uso de vistas, seleccione la que no es correcta: (Seleccione una opción)",
                 options: [
-                    { text: "A) Me ocupan espacio en la base de datos", correct: false },
+                    { text: "A) Me ocupan espacio en la base de datos", correct: true },
                     { text: "B) Pueden contener información de varias tablas", correct: false },
-                    { text: "C) No se puede encriptar", correct: true },
+                    { text: "C) No se puede encriptar", correct: false },
                     { text: "D) Pueden tener hasta 1024 campos", correct: false }
                 ],
                 answer: null
@@ -151,8 +151,8 @@
                 options: [
                     { text: "A) Los datos deberían tener sus títulos de campos en una sola fila", correct: true },
                     { text: "B) Pueden importarse hasta 5000 registros", correct: false },
-                    { text: "C) Se usa el asistente de importación de Microsoft Excel", correct: false },
-                    { text: "D) Debe guardarse en archivo de Excel en formato 97, 2003", correct: true }
+                    { text: "C) Se usa el asistente de importación de Microsoft Excel", correct: true },
+                    { text: "D) Debe guardarse en archivo de Excel en formato 97, 2003", correct: false }
                 ],
                 multiple: true,
                 answer: []
