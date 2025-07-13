@@ -1,292 +1,330 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Dataset - Sistema de Reconocimiento</title>
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: Arial, sans-serif;
-    }
-    body {
-      background-color: #f5f6fa;
-      display: flex;
-      flex-direction: column;
-    }
-    .topbar {
-      background: #fff;
-      padding: 10px 20px;
-      display: flex;
-      align-items: center;
-      border-bottom: 1px solid #ddd;
-    }
-    .topbar img {
-      width: 40px;
-      height: 40px;
-      border-radius: 6px;
-      margin-right: 10px;
-    }
-    .topbar-text {
-      line-height: 1.2;
-    }
-    .topbar-text h2 {
-      font-size: 14px;
-      color: #555;
-    }
-    .topbar-text p {
-      font-size: 12px;
-      color: #888;
-    }
-    .header-wrapper {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: #fff;
-      padding: 10px 20px;
-      border-bottom: 1px solid #ddd;
-    }
-    .header-wrapper h1 {
-      font-size: 18px;
-      color: #333;
-    }
-    .header-buttons {
-      display: flex;
-      gap: 10px;
-    }
-    .btn-purple {
-      background-color: #7c3aed;
-      color: white;
-      padding: 8px 16px;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-    .btn-white {
-      background-color: #fff;
-      color: #333;
-      border: 1px solid #ccc;
-      padding: 8px 16px;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-    .container {
-      display: flex;
-      flex: 1;
-    }
-    .sidebar {
-      width: 250px;
-      background-color: #fff;
-      padding: 20px;
-      border-right: 1px solid #ddd;
-      height: calc(100vh - 102px);
-      overflow-y: auto;
-    }
-    .sidebar h3 {
-      margin: 20px 0 10px;
-      font-size: 14px;
-      color: #888;
-      border-top: 1px solid #eee;
-      padding-top: 10px;
-    }
-    .sidebar ul {
-      list-style: none;
-    }
-    .sidebar ul li {
-      margin: 12px 0;
-      font-size: 15px;
-      color: #444;
-      cursor: pointer;
-      position: relative;
-    }
-    .sidebar ul li::before {
-      content: '\25A1';
-      color: #999;
-      margin-right: 8px;
-      display: inline-block;
-    }
-    .sidebar ul li:nth-child(1)::before { content: '\1F4E4'; color: #aaa; }
-    .sidebar ul li:nth-child(2)::before { content: '\270F';  color: #aaa; }
-    .sidebar ul li:nth-child(3)::before { content: '\1F4C2'; color: #aaa; }
-    .sidebar ul li:nth-child(4)::before { content: '\23F0';  color: #aaa; }
-    .sidebar ul li:nth-child(5)::before { content: '\1F4CA'; color: #aaa; }
-    .sidebar ul li:nth-child(6)::before { content: '\1F3F7'; color: #aaa; }
-    .sidebar ul:nth-of-type(2) li:nth-child(1)::before { content: '\1F916'; color: #aaa; }
-    .sidebar ul:nth-of-type(2) li:nth-child(2)::before { content: '\1F441'; color: #aaa; }
-    .sidebar ul:nth-of-type(3) li:nth-child(1)::before { content: '\1F680'; color: #aaa; }
-
-    .sidebar ul li.active {
-      font-weight: bold;
-      color: #7c3aed;
-    }
-    .sidebar ul li.active::before {
-      color: #7c3aed;
-    }
-    .sidebar ul li.active::after {
-      content: "";
-      position: absolute;
-      left: -20px;
-      top: 0;
-      height: 100%;
-      width: 4px;
-      background-color: #7c3aed;
-      border-radius: 2px;
-    }
-
-    .main {
-      flex: 1;
-      padding: 20px;
-      background: #f5f6fa;
-    }
-    .toolbar-top,
-    .toolbar-bottom {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-bottom: 10px;
-      align-items: center;
-    }
-    .toolbar-top input {
-      padding: 8px;
-      border-radius: 6px;
-      border: 1px solid #ccc;
-      flex: 1;
-    }
-    .toolbar-top button {
-      background-color: #7c3aed;
-      color: white;
-      padding: 8px 16px;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-    .toolbar-bottom select,
-    .toolbar-bottom button {
-      padding: 8px;
-      border-radius: 6px;
-      border: 1px solid #ccc;
-    }
-    .show-annotations-btn {
-      background-color: #fff;
-      font-weight: bold;
-      color: #333;
-    }
-    .image-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-      gap: 16px;
-    }
-    .image-card {
-      position: relative;
-      background-color: #fff;
-      border-radius: 10px;
-      overflow: hidden;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-      transition: 0.3s;
-    }
-    .image-card:hover {
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-    }
-    .image-card img {
-      width: 100%;
-      height: 140px;
-      object-fit: cover;
-    }
-    .image-card .filename {
-      padding: 6px 10px;
-      font-size: 12px;
-      color: #666;
-    }
-    .image-card .tag {
-      position: absolute;
-      top: 8px;
-      left: 8px;
-      font-size: 20px;
-      color: white;
-      text-shadow: 0 0 2px black;
-    }
-    .image-card .selected {
-      border: 2px solid #7c3aed;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Examen Paso a Paso con Temporizador y Aleatorio</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        #exam-container { display: none; }
+        .question { margin-bottom: 20px; }
+        .options input { margin-right: 10px; }
+        .blank { width: 200px; padding: 5px; }
+        button { margin: 10px 0; padding: 5px 10px; }
+        #timer { font-size: 18px; color: red; margin-bottom: 10px; }
+    </style>
 </head>
 <body>
-  <div class="topbar">
-    <img src="https://media.discordapp.net/attachments/1240821264197877812/1390551283974537427/image.png?ex=6868ab4d&is=686759cd&hm=ec121f92b8d494fe9190b7d06398624582da87a3913a4632a1c2f91ef9b23f67&=&format=webp&quality=lossless" alt="Project Icon" />
-    <div class="topbar-text">
-      <h2>Mi Escritorio</h2>
-      <p>Sistema de R... – Instance Segmentation</p>
-    </div>
-  </div>
+    <button onclick="startExam()">Iniciar Examen</button>
+    <div id="exam-container"></div>
+    <div id="timer"></div>
 
-  <div class="header-wrapper">
-    <h1>Dataset</h1>
-    <div class="header-buttons">
-      <button class="btn-white">+ New Dataset Version</button>
-      <button class="btn-purple">Train Model</button>
-    </div>
-  </div>
+    <script>
+        const questions = [
+            {
+                text: "1. Las Subconsultas son: (Seleccione una opción)",
+                options: [
+                    { text: "A) Expresiones de agrupamientos en el select", correct: false },
+                    { text: "B) Consulta en la lista de campos o en el filtro del select", correct: true },
+                    { text: "C) Funciones de agregados para sumatorias", correct: false },
+                    { text: "D) Elementos de otra tabla", correct: false }
+                ],
+                answer: null
+            },
+            {
+                text: "2. Las funciones definidas por el usuario: (Seleccione una opción)",
+                options: [
+                    { text: "E) Son las funciones de texto y agregados de SQL Server", correct: false },
+                    { text: "F) Reportan siempre suma de registro", correct: false },
+                    { text: "G) Se puede usar como agregados", correct: false },
+                    { text: "H) Retornan un valor o una tabla", correct: true }
+                ],
+                answer: null
+            },
+            {
+                text: "3. Para poder indexar una visita se debe incluir en la definición: (Seleccione una opción)",
+                options: [
+                    { text: "I) El esquema de la tabla origen únicamente", correct: false },
+                    { text: "J) El esquema de la tabla origen y la cláusula SchemaBinding", correct: true },
+                    { text: "K) No se puede indizar una vista", correct: false },
+                    { text: "L) La cláusula Encryption", correct: false }
+                ],
+                answer: null
+            },
+            {
+                text: "4. Para filtrar un campo con función de agregado se usa ………. y para filtrar un campo sin función de agregado se usa …………",
+                blanks: ["Having", "Where"],
+                answer: [null, null]
+            },
+            {
+                text: "5. Para el listado de las tablas producto y categorías. cuyo FK es por el campo CategoriaCodigo: (Seleccione una opción)",
+                options: [
+                    { text: "M) Select * from productos As P join Categorias As C on P.CategoryID = C:CategoriaID", correct: false },
+                    { text: "N) Select * from productos As P join Categorias As C on P.CategoryCodigo = P.CategoriasCodigo", correct: false },
+                    { text: "O) Select * from productos As P join Categorias As C on P.CategoryCodigo = C.CategoriasCodigo", correct: true },
+                    { text: "P) Ninguna de las anteriores", correct: false }
+                ],
+                answer: null
+            },
+            {
+                text: "6. Son las funciones fijas del servidor y de base de datos cuyos miembros tienen todos los permisos: (Seleccione una opción)",
+                options: [
+                    { text: "Q) Sys_admin y dbowner", correct: false },
+                    { text: "R) Sys_admin y db_admin", correct: false },
+                    { text: "S) Sysadmin y db_sysadmin", correct: false },
+                    { text: "T) Sysadmin y db_owner", correct: true }
+                ],
+                answer: null
+            },
+            {
+                text: "7. La siguiente instrucción reporta: Select Upper(SUBSTRING(‘Examen Final Datos 2’, 8,7)): (Seleccione una opción)",
+                options: [
+                    { text: "U) final D", correct: false },
+                    { text: "V) error", correct: false },
+                    { text: "W) Examen Final", correct: false },
+                    { text: "X) Final D", correct: true }
+                ],
+                answer: null
+            },
+            {
+                text: "8. El siguiente bloque de código: (Seleccione una opción)",
+                options: [
+                    { text: "Y) Listar los registros insertados en la variable tipo tabla @Datos", correct: true },
+                    { text: "Z) Insertar registro en la tabla datos", correct: false },
+                    { text: "AA) Reportar error", correct: false },
+                    { text: "BB) No muestran nada", correct: false }
+                ],
+                answer: null
+            },
+            {
+                text: "9. Para crear un esquema partición y repartir las particiones en los grupos de archivos de la base de datos se usa: (Seleccione una opción)",
+                options: [
+                    { text: "A) Create partition function GuiasRemisionEsquemaParticion As PartitionGuiasRemisionFuncionParticion to([PRIMARY],[CONTABILIDAD] COMERCIAL,PLANIFICACIÓN)", correct: false },
+                    { text: "B) Create partition Scheme GuiasRemisionEsquemaParticion As range for values to ([PRIMARY],[CONTABILIDAD] COMERCIAL,COMERCIAL,PLANIFICACIÓN)", correct: false },
+                    { text: "C) Create partition Scheme GuiasRemisionEsquemaParticion As partition GuiasRemisionFuncionParticion to ([PRIMARY],[CONTABILIDAD] COMERCIAL,PLANIFICACIÓN)", correct: true },
+                    { text: "D) Create partition function GuiasRemisionEsquemaParticion As range for values (‘E’,’J’,’O’,‘T’)", correct: false }
+                ],
+                answer: null
+            },
+            {
+                text: "10. Si la instrucción select de un cursor llamado cursorPrroducyosCompra es: Select P.ProductID, P.ProductName, P.UnitsInStock, P.UnitsOnOrder from dbo.Products As P, cual es la instrucción para leer los registros: (Seleccione una opción)",
+                options: [
+                    { text: "A) Fetch cursorProductosCompra to @Codigo, @Descripcion, @Stock, @EnOrden", correct: false },
+                    { text: "B) Fetch cursor cursorProductosCompra into (@Codigo, @Descripcion, @Stock, @EnOrden)", correct: false },
+                    { text: "C) Fetch cursor cursorProductosCompra into @Codigo, @Descripcion, @Stock, @EnOrden", correct: true },
+                    { text: "D) Fetch cursor cursorProductosCompra from @Codigo, @Descripcion, @Stock, @EnOrden", correct: false }
+                ],
+                answer: null
+            },
+            {
+                text: "11. Para crear un inicio de sesión con la cuenta de windows llamada jefe del equipo Londres se utiliza: (Seleccione una opción)",
+                options: [
+                    { text: "A) Create login jefe from Windows\\Londres", correct: false },
+                    { text: "B) Create login jefe from[Londres\\jefe]", correct: false },
+                    { text: "C) create login [Londres\\jefe] with password = ‘123’", correct: false },
+                    { text: "D) create login [Londres\\jefe] from windows", correct: true }
+                ],
+                answer: null
+            },
+            {
+                text: "12. Suponiendo que se tiene la BD abierta, la siguiente instrucción reporta: (Seleccione una opción)",
+                options: [
+                    { text: "A) Lista las categorías y la cantidad de productos por cada categoría", correct: false },
+                    { text: "B) Lista las categorías y la suma de productos por cada categoría", correct: false },
+                    { text: "C) Reportar error", correct: true },
+                    { text: "D) Lista los productos de cada categoría", correct: false }
+                ],
+                answer: null
+            },
+            {
+                text: "13. Respecto al uso de vistas, seleccione la que no es correcta: (Seleccione una opción)",
+                options: [
+                    { text: "A) Me ocupan espacio en la base de datos", correct: true },
+                    { text: "B) Pueden contener información de varias tablas", correct: false },
+                    { text: "C) No se puede encriptar", correct: false },
+                    { text: "D) Pueden tener hasta 1024 campos", correct: false }
+                ],
+                answer: null
+            },
+            {
+                text: "14. Para insertar con el asistente de SQL Server información desde una hoja de Excel, seleccione las opciones correctas:",
+                options: [
+                    { text: "A) Los datos deberían tener sus títulos de campos en una sola fila", correct: true },
+                    { text: "B) Pueden importarse hasta 5000 registros", correct: false },
+                    { text: "C) Se usa el asistente de importación de Microsoft Excel", correct: true },
+                    { text: "D) Debe guardarse en archivo de Excel en formato 97, 2003", correct: false }
+                ],
+                multiple: true,
+                answer: []
+            },
+            {
+                text: "15. Teniendo el SQLCommand creado en Visual Studio, el método para ejecutar este y el tipo de parámetro que es necesario para capturar el valor de retorno es: (Seleccione una opción)",
+                options: [
+                    { text: "A) ExecuteQuery y ReturnValue", correct: false },
+                    { text: "B) ExecuteNonQuery y Return_Value", correct: true },
+                    { text: "C) ExecuteNonQuery y @Resultado", correct: false },
+                    { text: "D) EndExecuteNonQuery y Return_Value", correct: false }
+                ],
+                answer: null
+            },
+            {
+                text: "16. La herramienta SQL SERVER Profiler: (Seleccione una opción)",
+                options: [
+                    { text: "A) Guarda los eventos seleccionados según la plantilla para utilizarlos en la optimización del motor de base de datos", correct: true },
+                    { text: "B) Guardar los registros seleccionados según la plantilla para utilizarlos en la optimización del motor de base de datos", correct: false },
+                    { text: "C) Guardar los registros en una base para analizar el rendimiento", correct: false },
+                    { text: "D) Crea planes de mantenimiento para optimizar la BD", correct: false }
+                ],
+                answer: null
+            },
+            {
+                text: "17. La propiedad para que un formulario sea formulario padre en Visual Studio es IsMdiContainer: (Seleccione una opción)",
+                options: [
+                    { text: "VERDADERO", correct: true },
+                    { text: "FALSO", correct: false }
+                ],
+                answer: null
+            },
+            {
+                text: "18. Para definir un parámetro (SQLParameter) en Visual Studio para un campo de tipo nvarchar de tamaño 40, se debe especificar: (Seleccione una opción)",
+                options: [
+                    { text: "A) Nombre y Tipo de dato", correct: false },
+                    { text: "B) Nombre, Tipo de dato, tamaño, Dirección y Valor", correct: true },
+                    { text: "C) Nombre, Tipo de dato y Valor", correct: false },
+                    { text: "D) Nombre, Tipo de dato, Direccion", correct: false }
+                ],
+                answer: null
+            },
+            {
+                text: "19. La FDU siguiente: (Seleccione una opción)",
+                options: [
+                    { text: "A) Suma las unidades en Stock de las categorías", correct: false },
+                    { text: "B) Suma las unidades en Stock de los productos de una categoría", correct: true },
+                    { text: "C) Suma todas las unidades en orden de cada producto", correct: false },
+                    { text: "D) Cuenta las unidades en Stock de cada productos por categoría", correct: false }
+                ],
+                answer: null
+            },
+            {
+                text: "20. Para que un campo en la tabla se compruebe el ingreso de valores definidos y para definir integridad de datos entre las tablas se deben especificar las restricciones siguientes: (Seleccione una opción)",
+                options: [
+                    { text: "a) default y Unique", correct: false },
+                    { text: "b) Unique y default", correct: false },
+                    { text: "c) check, primary key", correct: false },
+                    { text: "d) check, foreign key", correct: true }
+                ],
+                answer: null
+            }
+        ];
 
-  <div class="container">
-    <aside class="sidebar">
-      <h3>DATA</h3>
-      <ul>
-        <li>Upload Data</li>
-        <li>Annotate</li>
-        <li class="active">Dataset <span style="color: #7c3aed;">(10)</span></li>
-        <li>Versions</li>
-        <li>Analytics</li>
-        <li>Classes & Tags</li>
-      </ul>
-      <h3>MODELS</h3>
-      <ul>
-        <li>Models</li>
-        <li>Visualize</li>
-      </ul>
-      <h3>DEPLOY</h3>
-      <ul>
-        <li>Export / Deploy</li>
-      </ul>
-    </aside>
+        let currentQuestion = 0;
+        let timeLeft = 600; // 10 minutos en segundos
+        let shuffledQuestions = [];
+        let timerInterval;
 
-    <main class="main">
-      <div class="toolbar-top">
-        <input type="text" placeholder="Search images" />
-        <button>Search by Image</button>
-      </div>
-      <div class="toolbar-bottom">
-        <select><option>Filter by filename</option></select>
-        <select><option>Split</option><option>Train</option><option>Test</option></select>
-        <select><option>Classes</option></select>
-        <select><option>Sort by</option><option>Newest</option><option>Oldest</option></select>
-        <button class="show-annotations-btn">Show annotations</button>
-      </div>
+        function startExam() {
+            document.getElementById('exam-container').style.display = 'block';
+            document.querySelector('button').style.display = 'none';
+            shuffledQuestions = [...questions].sort(() => Math.random() - 0.5);
+            startTimer();
+            showQuestion();
+        }
 
-      <div class="image-grid">
-        <div class="image-card">
-          <div class="tag">✔</div>
-          <img src="https://media.discordapp.net/attachments/1240821264197877812/1390551227896565800/image.png?ex=6868ab3f&is=686759bf&hm=6cda5fcb89890b51191f4ca2a3d4bc697d207e007870049b1acf6c7162e9b452&=&format=webp&quality=lossless" alt="img1">
-          <div class="filename">istockphoto-533964313-612x612.jpg</div>
-        </div>
-        <div class="image-card">
-          <div class="tag">✔</div>
-          <img src="https://media.discordapp.net/attachments/1240821264197877812/1390551283974537427/image.png?ex=6868ab4d&is=686759cd&hm=ec121f92b8d494fe9190b7d06398624582da87a3913a4632a1c2f91ef9b23f67&=&format=webp&quality=lossless" alt="img2">
-          <div class="filename">istockphoto-157743690.jpg</div>
-        </div>
-        <div class="image-card selected">
-          <div class="tag">✔</div>
-          <img src="https://media.discordapp.net/attachments/1240821264197877812/1390551344104083536/image.png?ex=6868ab5b&is=686759db&hm=1b4b0816a2a6d001b29931a559231f2408db19d5bd5f06fdba3bb2d99fdd1f93&=&format=webp&quality=lossless" alt="img3">
-          <div class="filename">istockphoto-601908512.jpg</div>
-        </div>
-        <div class="image-card">
-          <div class="tag">✔</div>
-          <img src="https://media.discordapp.net/attachments/1240821264197877812/1390551814503534632/image.png?ex=6868abcb&is=68675a4b&hm=c3938b3fce93f31e257cd1005165effe7ce37349ff1c4fae6ca255329ef735ca&=&format=webp&quality=lossless" alt="img4">
-          <div class="filename">istockphoto-928244014.jpg</div>
-        </div>
-      </div>
-    </main>
-  </div>
+        function startTimer() {
+            const timer = document.getElementById('timer');
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                timer.textContent = `Tiempo restante: ${Math.floor(timeLeft / 60)}:${timeLeft % 60 < 10 ? '0' : ''}${timeLeft % 60}`;
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    calculateScore();
+                }
+            }, 1000);
+        }
+
+        function showQuestion() {
+            const container = document.getElementById('exam-container');
+            container.innerHTML = '';
+
+            if (currentQuestion < shuffledQuestions.length) {
+                const q = shuffledQuestions[currentQuestion];
+                const div = document.createElement('div');
+                div.className = 'question';
+                div.innerHTML = `<h3>${currentQuestion + 1}. ${q.text}</h3>`;
+
+                if (q.options) {
+                    q.options.sort(() => Math.random() - 0.5).forEach((opt, i) => {
+                        const label = document.createElement('label');
+                        const input = document.createElement('input');
+                        input.type = q.multiple ? 'checkbox' : 'radio';
+                        input.name = `q${currentQuestion}`;
+                        input.value = opt.text;
+                        input.onclick = () => {
+                            if (!q.multiple) q.answer = opt.text;
+                            else {
+                                if (!q.answer) q.answer = [];
+                                const index = q.answer.indexOf(opt.text);
+                                if (index === -1) q.answer.push(opt.text);
+                                else q.answer.splice(index, 1);
+                            }
+                        };
+                        label.appendChild(input);
+                        label.appendChild(document.createTextNode(` ${opt.text}`));
+                        div.appendChild(label);
+                        div.appendChild(document.createElement('br'));
+                    });
+                } else if (q.blanks) {
+                    q.blanks.forEach((blank, i) => {
+                        const input = document.createElement('input');
+                        input.type = 'text';
+                        input.className = 'blank';
+                        input.placeholder = `Blanco ${i + 1}`;
+                        input.onchange = (e) => {
+                            if (!q.answer) q.answer = [];
+                            q.answer[i] = e.target.value;
+                        };
+                        div.appendChild(input);
+                        div.appendChild(document.createElement('br'));
+                    });
+                }
+
+                const button = document.createElement('button');
+                button.textContent = currentQuestion === shuffledQuestions.length - 1 ? 'Enviar' : 'Siguiente';
+                button.onclick = () => {
+                    if (currentQuestion < shuffledQuestions.length - 1) {
+                        currentQuestion++;
+                        showQuestion();
+                    } else {
+                        clearInterval(timerInterval);
+                        timeLeft = 0; // Forzar tiempo a 0 al enviar
+                        document.getElementById('timer').textContent = `Tiempo restante: 0:00`;
+                        calculateScore();
+                    }
+                };
+                div.appendChild(button);
+
+                container.appendChild(div);
+            }
+        }
+
+        function calculateScore() {
+            let score = 0;
+            shuffledQuestions.forEach((q, i) => {
+                if (q.options) {
+                    if (q.multiple) {
+                        const correct = q.options.filter(o => o.correct).map(o => o.text);
+                        if (JSON.stringify(q.answer?.sort()) === JSON.stringify(correct.sort())) score++;
+                    } else {
+                        const correct = q.options.find(o => o.correct)?.text;
+                        if (q.answer === correct) score++;
+                    }
+                } else if (q.blanks) {
+                    if (q.answer && q.answer.every((a, i) => a.toLowerCase() === q.blanks[i].toLowerCase())) score++;
+                }
+            });
+            document.getElementById('exam-container').innerHTML = `<h3>Tu puntaje es: ${score} de 20</h3>`;
+            alert(`Tu puntaje es: ${score} de 20`);
+        }
+    </script>
 </body>
 </html>
