@@ -34,20 +34,20 @@
             {
                 text: "2. Las funciones definidas por el usuario: (Seleccione una opción)",
                 options: [
-                    { text: "E) Son las funciones de texto y agregados de SQL Server", correct: false },
-                    { text: "F) Reportan siempre suma de registro", correct: false },
-                    { text: "G) Se puede usar como agregados", correct: false },
-                    { text: "H) Retornan un valor o una tabla", correct: true }
+                    { text: "A) Son las funciones de texto y agregados de SQL Server", correct: false },
+                    { text: "B) Reportan siempre suma de registro", correct: false },
+                    { text: "C) Se puede usar como agregados", correct: false },
+                    { text: "D) Retornan un valor o una tabla", correct: true }
                 ],
                 answer: null
             },
             {
                 text: "3. Para poder indexar una visita se debe incluir en la definición: (Seleccione una opción)",
                 options: [
-                    { text: "I) El esquema de la tabla origen únicamente", correct: false },
-                    { text: "J) El esquema de la tabla origen y la cláusula SchemaBinding", correct: true },
-                    { text: "K) No se puede indizar una vista", correct: false },
-                    { text: "L) La cláusula Encryption", correct: false }
+                    { text: "A) El esquema de la tabla origen únicamente", correct: false },
+                    { text: "B) El esquema de la tabla origen y la cláusula SchemaBinding", correct: true },
+                    { text: "C) No se puede indizar una vista", correct: false },
+                    { text: "D) La cláusula Encryption", correct: false }
                 ],
                 answer: null
             },
@@ -59,40 +59,40 @@
             {
                 text: "5. Para el listado de las tablas producto y categorías. cuyo FK es por el campo CategoriaCodigo: (Seleccione una opción)",
                 options: [
-                    { text: "M) Select * from productos As P join Categorias As C on P.CategoryID = C:CategoriaID", correct: false },
-                    { text: "N) Select * from productos As P join Categorias As C on P.CategoryCodigo = P.CategoriasCodigo", correct: false },
-                    { text: "O) Select * from productos As P join Categorias As C on P.CategoryCodigo = C.CategoriasCodigo", correct: true },
-                    { text: "P) Ninguna de las anteriores", correct: false }
+                    { text: "A) Select * from productos As P join Categorias As C on P.CategoryID = C:CategoriaID", correct: false },
+                    { text: "B) Select * from productos As P join Categorias As C on P.CategoryCodigo = P.CategoriasCodigo", correct: false },
+                    { text: "C) Select * from productos As P join Categorias As C on P.CategoryCodigo = C.CategoriasCodigo", correct: true },
+                    { text: "D) Ninguna de las anteriores", correct: false }
                 ],
                 answer: null
             },
             {
                 text: "6. Son las funciones fijas del servidor y de base de datos cuyos miembros tienen todos los permisos: (Seleccione una opción)",
                 options: [
-                    { text: "Q) Sys_admin y dbowner", correct: false },
-                    { text: "R) Sys_admin y db_admin", correct: false },
-                    { text: "S) Sysadmin y db_sysadmin", correct: false },
-                    { text: "T) Sysadmin y db_owner", correct: true }
+                    { text: "A) Sys_admin y dbowner", correct: false },
+                    { text: "B) Sys_admin y db_admin", correct: false },
+                    { text: "C) Sysadmin y db_sysadmin", correct: false },
+                    { text: "D) Sysadmin y db_owner", correct: true }
                 ],
                 answer: null
             },
             {
                 text: "7. La siguiente instrucción reporta: Select Upper(SUBSTRING(‘Examen Final Datos 2’, 8,7)): (Seleccione una opción)",
                 options: [
-                    { text: "U) final D", correct: false },
-                    { text: "V) error", correct: false },
-                    { text: "W) Examen Final", correct: false },
-                    { text: "X) Final D", correct: true }
+                    { text: "A) final D", correct: false },
+                    { text: "B) error", correct: false },
+                    { text: "C) Examen Final", correct: false },
+                    { text: "D) Final D", correct: true }
                 ],
                 answer: null
             },
             {
                 text: "8. El siguiente bloque de código: (Seleccione una opción)",
                 options: [
-                    { text: "Y) Listar los registros insertados en la variable tipo tabla @Datos", correct: true },
-                    { text: "Z) Insertar registro en la tabla datos", correct: false },
-                    { text: "AA) Reportar error", correct: false },
-                    { text: "BB) No muestran nada", correct: false }
+                    { text: "A) Listar los registros insertados en la variable tipo tabla @Datos", correct: true },
+                    { text: "B) Insertar registro en la tabla datos", correct: false },
+                    { text: "C) Reportar error", correct: false },
+                    { text: "D) No muestran nada", correct: false }
                 ],
                 answer: null
             },
@@ -208,10 +208,10 @@
             {
                 text: "20. Para que un campo en la tabla se compruebe el ingreso de valores definidos y para definir integridad de datos entre las tablas se deben especificar las restricciones siguientes: (Seleccione una opción)",
                 options: [
-                    { text: "a) default y Unique", correct: false },
-                    { text: "b) Unique y default", correct: false },
-                    { text: "c) check, primary key", correct: false },
-                    { text: "d) check, foreign key", correct: true }
+                    { text: "A) default y Unique", correct: false },
+                    { text: "B) Unique y default", correct: false },
+                    { text: "C) check, primary key", correct: false },
+                    { text: "D) check, foreign key", correct: true }
                 ],
                 answer: null
             }
