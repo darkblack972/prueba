@@ -313,13 +313,13 @@
                 if (q.options) {
                     if (q.multiple) {
                         const correct = q.options.filter(o => o.correct).map(o => o.text);
-                        if (JSON.stringify(q.answer?.sort()) === JSON.stringify(correct.sort())) score++;
+                        if (q.answer && JSON.stringify(q.answer?.sort()) === JSON.stringify(correct.sort())) score++;
                     } else {
                         const correct = q.options.find(o => o.correct)?.text;
                         if (q.answer === correct) score++;
                     }
                 } else if (q.blanks) {
-                    if (q.answer && q.answer.every((a, i) => a.toLowerCase() === q.blanks[i].toLowerCase())) score++;
+                    if (q.answer && q.answer.every((a, i) => a && a.toLowerCase() === q.blanks[i].toLowerCase())) score++;
                 }
             });
             document.getElementById('exam-container').innerHTML = `<h3>Tu puntaje es: ${score} de 20</h3>`;
