@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Examen Paso a Paso con Temporizador y Aleatorio</title>
+    <title>Examen Paso a Paso con Temporizador</title>
     <style>
         body { font-family: Arial, sans-serif; margin: 20px; }
         #exam-container { display: none; }
@@ -12,6 +12,7 @@
         .blank { width: 200px; padding: 5px; }
         button { margin: 10px 0; padding: 5px 10px; }
         #timer { font-size: 18px; color: red; margin-bottom: 10px; }
+        pre { background: #f4f4f4; padding: 10px; border: 1px solid #ddd; overflow-x: auto; }
     </style>
 </head>
 <body>
@@ -88,6 +89,7 @@
             },
             {
                 text: "8. El siguiente bloque de código: (Seleccione una opción)",
+                code: "Declare @Datos table (\nCódigo nchar(3) Descripción nchar(50)\n)\ngo\n\ninsert into @Datos values (‘001’, ‘Escritorio’),(‘002’, ‘Ventilador’),(‘334’, ‘Pizarra’),(‘556’, ‘Monitor’),(‘357’, ‘Mouse’)\nSelect * from @Datos\ngo",
                 options: [
                     { text: "Y) Listar los registros insertados en la variable tipo tabla @Datos", correct: true },
                     { text: "Z) Insertar registro en la tabla datos", correct: false },
@@ -128,6 +130,7 @@
             },
             {
                 text: "12. Suponiendo que se tiene la BD abierta, la siguiente instrucción reporta: (Seleccione una opción)",
+                code: "Select\nC.CategoryID As ‘Codigo’, C.CategoryName As ‘Categoria’\nCOUNT(P.ProductID) As ‘Cantidad de productos’ from Northwind dbo.Categories As C\njoin dbo.Products As P on C.CategoryID = P.CategoryID group by C.CategoryID\ngo",
                 options: [
                     { text: "A) Lista las categorías y la cantidad de productos por cada categoría", correct: false },
                     { text: "B) Lista las categorías y la suma de productos por cada categoría", correct: false },
@@ -197,6 +200,7 @@
             },
             {
                 text: "19. La FDU siguiente: (Seleccione una opción)",
+                code: "Create or alter function dbo.fduSumaItemsStockPorCategoria(@CodigoCategoria int) returns int with encryption\nAs Begin\nDeclare @CantidadItems int\nset @CantidadItems = (Select SUM(P.UnitsInStock) from dbo.Products As P Where P.CategoryID = @CodigoCategoria )\nreturn @CantidadItems\nEnd\ngo",
                 options: [
                     { text: "A) Suma las unidades en Stock de las categorías", correct: false },
                     { text: "B) Suma las unidades en Stock de los productos de una categoría", correct: true },
@@ -220,23 +224,29 @@
         let currentQuestion = 0;
         let timeLeft = 600; // 10 minutos en segundos
         let shuffledQuestions = [];
-        let timerInterval;
 
         function startExam() {
             document.getElementById('exam-container').style.display = 'block';
             document.querySelector('button').style.display = 'none';
             shuffledQuestions = [...questions].sort(() => Math.random() - 0.5);
+            shuffledQuestions.forEach(q => {
+                if (q.options) {
+                    q.options.sort(() => Math.random() - 0.5);
+                }
+            });
             startTimer();
             showQuestion();
         }
 
         function startTimer() {
             const timer = document.getElementById('timer');
-            timerInterval = setInterval(() => {
+            timer.textContent = `Tiempo restante: ${Math.floor(timeLeft / 60)}:${timeLeft % 60 < 10 ? '0' : ''}${timeLeft % 60}`;
+
+            const interval = setInterval(() => {
                 timeLeft--;
                 timer.textContent = `Tiempo restante: ${Math.floor(timeLeft / 60)}:${timeLeft % 60 < 10 ? '0' : ''}${timeLeft % 60}`;
                 if (timeLeft <= 0) {
-                    clearInterval(timerInterval);
+                    clearInterval(interval);
                     calculateScore();
                 }
             }, 1000);
@@ -252,8 +262,14 @@
                 div.className = 'question';
                 div.innerHTML = `<h3>${currentQuestion + 1}. ${q.text}</h3>`;
 
+                if (q.code) {
+                    const codeBlock = document.createElement('pre');
+                    codeBlock.textContent = q.code;
+                    div.appendChild(codeBlock);
+                }
+
                 if (q.options) {
-                    q.options.sort(() => Math.random() - 0.5).forEach((opt, i) => {
+                    q.options.forEach((opt, i) => {
                         const label = document.createElement('label');
                         const input = document.createElement('input');
                         input.type = q.multiple ? 'checkbox' : 'radio';
@@ -295,9 +311,6 @@
                         currentQuestion++;
                         showQuestion();
                     } else {
-                        clearInterval(timerInterval);
-                        timeLeft = 0; // Forzar tiempo a 0 al enviar
-                        document.getElementById('timer').textContent = `Tiempo restante: 0:00`;
                         calculateScore();
                     }
                 };
