@@ -99,10 +99,10 @@
             {
                 text: "9. Para crear un esquema partición y repartir las particiones en los grupos de archivos de la base de datos se usa: (Seleccione una opción)",
                 options: [
-                    { text: "A) Create partition function GuiasRemisionEsquemaParticion As PartitionGuiasRemisionFuncionParticion to([PRIMARY],[CONTABILIDAD] COMERCIAL,PLANIFICACIÓN)", correct: false },
-                    { text: "B) Create partition Scheme GuiasRemisionEsquemaParticion As range for values to ([PRIMARY],[CONTABILIDAD] COMERCIAL,COMERCIAL,PLANIFICACIÓN)", correct: false },
-                    { text: "C) Create partition Scheme GuiasRemisionEsquemaParticion As partition GuiasRemisionFuncionParticion to ([PRIMARY],[CONTABILIDAD] COMERCIAL,PLANIFICACIÓN)", correct: true },
-                    { text: "D) Create partition function GuiasRemisionEsquemaParticion As range for values (‘E’,’J’,’O’,‘T’)", correct: false }
+                    { text: "A) Create partition schema dbo.GuiasRemisionEsquemaParticion As Partition GuiasRemisionFuncionParticion to ([PRIMARY] , [CONTABILIDAD] , COMERCIAL, PLANIFICACION)", correct: false },
+                    { text: "B) Create partition schema GuiasRemisionEsquemaParticion As Partition GuiasRemisionFuncionParticion to ([PRIMARY] , [CONTABILIDAD] , COMERCIAL, PLANIFICACION)", correct: false },
+                    { text: "C) Create partition scheme GuiasRemisionEsquemaParticion As Partition GuiasRemisionFuncionParticion to ([PRIMARY] , [CONTABILIDAD] , COMERCIAL, PLANIFICACION)", correct: true },
+                    { text: "D) Create partition function GuiasRemisionEsquemaParticion As Partition GuiasRemisionFuncionParticion to ([PRIMARY] , [CONTABILIDAD] , COMERCIAL, PLANIFICACION)", correct: false }
                 ],
                 answer: null
             },
@@ -214,6 +214,26 @@
                     { text: "D) check, foreign key", correct: true }
                 ],
                 answer: null
+            },
+            {
+                text: "21. Para definir un SQL Command (Comando) en Visual Studio, se deben definir: (Seleccione una opción)",
+                options: [
+                    { text: "A) Las instrucción select y el dataset", correct: false },
+                    { text: "B) el nombre del parámetro, el tipo y la cadena de conexión", correct: false },
+                    { text: "C) El Texto del comando, el tipo y la conexión", correct: true },
+                    { text: "D) Los controles para mostrar los datos", correct: false }
+                ],
+                answer: null
+            },
+            {
+                text: "22. Un procedimiento almacenado puede devolver, en un tipo de parámetro de valor retorno: (Seleccione una opción)",
+                options: [
+                    { text: "A) todos los campos de un registro", correct: false },
+                    { text: "B) resultados que se guardan en un dataset", correct: false },
+                    { text: "C) valores de cualquier tipo de dato", correct: false },
+                    { text: "D) valores numéricos", correct: true }
+                ],
+                answer: null
             }
         ];
 
@@ -322,8 +342,8 @@
                     if (q.answer && q.answer.every((a, i) => a && a.toLowerCase() === q.blanks[i].toLowerCase())) score++;
                 }
             });
-            document.getElementById('exam-container').innerHTML = `<h3>Tu puntaje es: ${score} de 20</h3>`;
-            alert(`Tu puntaje es: ${score} de 20`);
+            document.getElementById('exam-container').innerHTML = `<h3>Tu puntaje es: ${score} de 22</h3>`;
+            alert(`Tu puntaje es: ${score} de 22`);
         }
     </script>
 </body>
