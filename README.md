@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+[<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -348,3 +348,4 @@
     </script>
 </body>
 </html>
+](https://darkblack972.github.io/prueba/)
